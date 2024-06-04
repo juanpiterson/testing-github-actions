@@ -1,0 +1,32 @@
+name: Update Stage Branch
+
+on:
+  push:
+    branches: [main]
+    
+permissions: 
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Setup Git User
+        run: |
+          git config user.name "GitHub Action"
+          git config user.email "<EMAIL>"
+
+      - name: Update Stage Branch
+        run: |
+          git checkout main
+          git fetch origin
+          git checkout stage
+          git pull
+          git merge origin/main
+          git push origin stage
+          
